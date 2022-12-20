@@ -1,2 +1,7 @@
-**/*env/**
+**/*env*/**
 *.pyc
+
+.env
+.env.devel
+.env.production
+.env.stage
