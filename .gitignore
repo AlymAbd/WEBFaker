@@ -8,5 +8,6 @@
 
 **.ipynb
 .*/**
+*env*
 node_modules/*
 
