@@ -5,3 +5,8 @@
 .env.devel
 .env.production
 .env.stage
+
+**.ipynb
+.*/**
+node_modules/*
+

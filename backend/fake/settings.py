@@ -10,13 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from fake.custom import EnvEnv
-
+from fake.custom import env
 from pathlib import Path
-
-env = EnvEnv(
-    DEBUG=(bool, False)
-)
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    'django_extensions',
+    'webpack_loader'
 ]
 
 APPS = [
@@ -150,9 +148,14 @@ USE_TZ = env.bool('USE_TZ', default=True)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, '_static/'),]
 STATIC_URL = env('STATIC_URL', default='static/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT = (os.path.join(BASE_DIR, '_media/'))
+MEDIA_URL = '/_media/'
+ADMIN_MEDIA_PREFIX = '/_static/admin/'
