@@ -15,8 +15,6 @@ const loading = (
   </div>
 )
 
-console.log('loaded')
-
 class App extends Component {
   constructor(props) {
     super(props)
