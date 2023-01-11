@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_extensions',
-    'webpack_loader'
 ]
 
 APPS = [
@@ -62,10 +61,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'fake.urls'
 
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates/')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,24 +139,23 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 
-TIME_ZONE = env('TIME_ZONE', default='UTC')
+TIME_ZONE = env.str('TIME_ZONE', default='UTC')
 
-USE_I18N = env.bool('USE_I18N', default=True)
+USE_I18N = env('USE_I18N', default=True)
 
-USE_TZ = env.bool('USE_TZ', default=True)
+USE_TZ = env('USE_TZ', default=True)
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, '_static/'),]
-STATIC_URL = env('STATIC_URL', default='static/')
+STATICFILES_DIRS = [os.path.join(BASE_DIR.parent, 'public/'),]
+STATIC_URL = env('STATIC_URL', default='public/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = (os.path.join(BASE_DIR, '_media/'))
-MEDIA_URL = '/_media/'
-ADMIN_MEDIA_PREFIX = '/_static/admin/'
+MEDIA_ROOT = (os.path.join(BASE_DIR.parent, 'public/media/'))
+MEDIA_URL = 'media/'

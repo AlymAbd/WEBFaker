@@ -1,48 +1,67 @@
 {
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "name": "webfaker",
-  "version": "1.0.0",
-  "main": "webpack.config.js",
-  "directories": {
-    "test": "tests"
-  },
+  "name": "faker",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npm run development",
+    "development": "mix",
+    "hot": "mix watch --hot",
+    "prod": "npm run production",
+    "production": "mix --production",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AlymAbd/WEBFaker.git"
+  "dependencies": {
+    "@coreui/chartjs": "^3.0.0",
+    "@coreui/coreui": "^4.2.1",
+    "@coreui/icons": "^2.1.0",
+    "@coreui/icons-react": "^2.1.0",
+    "@coreui/react": "^4.3.1",
+    "@coreui/react-chartjs": "^2.1.0",
+    "@coreui/utils": "^1.3.1",
+    "axios": "^1.1.3",
+    "chart.js": "^3.9.1",
+    "classnames": "^2.3.1",
+    "core-js": "^3.24.1",
+    "history": "^5.3.0",
+    "i18next": "^21.10.0",
+    "i18next-browser-languagedetector": "^6.1.8",
+    "i18next-http-backend": "^1.4.4",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-app-polyfill": "^3.0.0",
+    "react-datepicker": "^4.8.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^11.18.6",
+    "react-query": "^3.39.2",
+    "react-redux": "^8.0.2",
+    "react-router-dom": "^6.4.2",
+    "react-select": "^5.6.0",
+    "redux": "4.2.0",
+    "simplebar-react": "^2.4.1",
+    "universal-cookie": "^4.0.4"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AlymAbd/WEBFaker/issues"
-  },
-  "homepage": "https://github.com/AlymAbd/WEBFaker#readme",
-  "description": "",
   "devDependencies": {
-    "@babel/core": "^7.20.12",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
-    "babel-loader": "^9.1.2",
-    "bootstrap": "^5.2.3",
-    "bootstrap-icons": "^1.10.3",
-    "css-loader": "^6.7.3",
-    "html-webpack-plugin": "^5.5.0",
-    "mini-css-extract-plugin": "^2.7.2",
-    "node-sass": "^8.0.0",
-    "prettier": "^2.8.2",
-    "sass": "^1.57.1",
-    "sass-loader": "^13.2.0",
-    "style-loader": "^3.3.1",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.75.0",
-    "webpack-bundle-tracker": "^1.8.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^14.4.3",
+    "auto-changelog": "~2.4.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "laravel-mix": "^6.0.6",
+    "postcss": "^8.1.14",
+    "prettier": "2.7.1",
+    "react-scripts": "^2.1.3",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.54.4",
+    "sass-loader": "^11.1.1",
+    "web-vitals": "^2.1.4"
+  },
+  "overrides": {
+    "graceful-fs": "^4.2.9"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6"
   }
 }

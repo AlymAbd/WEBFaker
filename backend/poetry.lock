@@ -674,18 +674,6 @@ files = [
 ]
 
 [[package]]
-name = "django-webpack-loader"
-version = "1.8.0"
-description = "Transparently use webpack with django"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "django-webpack-loader-1.8.0.tar.gz", hash = "sha256:a6e679805e9607b073ee52702d9b426bac1a54609d966131aa434c78602ac050"},
-    {file = "django_webpack_loader-1.8.0-py2.py3-none-any.whl", hash = "sha256:e2d19979772bfa7c9c566a67690368bd1ba9979a7e3f3ba485dc621e0206f997"},
-]
-
-[[package]]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
@@ -1022,20 +1010,22 @@ test = ["ipykernel", "pre-commit", "pytest", "pytest-cov", "pytest-timeout"]
 
 [[package]]
 name = "jupyter-events"
-version = "0.6.0"
+version = "0.6.1"
 description = "Jupyter Event System library"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "jupyter_events-0.6.0-py3-none-any.whl", hash = "sha256:587f3055fe965f023b23b9929b22d2070e8b5c79ef0a42e37bdb12199862f63c"},
-    {file = "jupyter_events-0.6.0.tar.gz", hash = "sha256:bee793d06e124c5a80da3346f96f17aec5e0f28b632a514682b2a18ff548c69a"},
+    {file = "jupyter_events-0.6.1-py3-none-any.whl", hash = "sha256:353b165928cd411eecba6b194fd4a80219981e7d8ed2842b19b3c7beb4116258"},
+    {file = "jupyter_events-0.6.1.tar.gz", hash = "sha256:119d3f6372f1d61cdf2b3f5a880516263d4704fc87633fd293386450e955679c"},
 ]
 
 [package.dependencies]
-jsonschema = {version = ">=4.3.0", extras = ["format-nongpl"]}
+jsonschema = {version = ">=3.2.0", extras = ["format-nongpl"]}
 python-json-logger = ">=2.0.4"
 pyyaml = ">=6.0"
+rfc3339-validator = "*"
+rfc3986-validator = ">=0.1.1"
 traitlets = ">=5.3"
 
 [package.extras]
@@ -2384,4 +2374,4 @@ test = ["websockets"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ec70e72cdad541c7a47358019ea50669c23975808e8e04354ecef7a67f26441a"
+content-hash = "0c1d9761f855973ac34f42f3d9076a807efaecca939818b8fe06dbd619619659"
