@@ -35,13 +35,9 @@ const DropDownItems = () => {
     ]
   } else {
     return [
-      <CDropdownItem href={generateLink('login')} key="login">
+      <CDropdownItem href={generateLink('home')} key="login">
         <CIcon icon={cilUser} className="me-2" />
         {t('Login')}
-      </CDropdownItem>,
-      <CDropdownItem href={generateLink('register')} key="register">
-        <CIcon icon={cilUserPlus} className="me-2" />
-        {t('Register')}
       </CDropdownItem>,
     ]
   }

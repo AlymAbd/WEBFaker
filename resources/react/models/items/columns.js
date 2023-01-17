@@ -1,4 +1,4 @@
-import { session } from '@r/service/axios'
+import axios from '@r/service/axios'
 import Model from './model'
 
 class Column {

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User as UserAbs
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 FIELD_FORMAT_CHOICES = [
@@ -40,8 +40,6 @@ EXPECT_CHOICES = [
     ('null', 'Nothing')
 ]
 
-class User(UserAbs):
-    pass
 
 class Instances(models.Model):
     https = models.BooleanField(default=True)
