@@ -36,7 +36,7 @@ class UserSettingsComponent extends Component {
           onFailUpload={this.onFailUploadCallback}
           onSubmit={this.onSubmitCallback}
           onFailSubmit={this.onFailSubmitCallback}
-          routeToDetail="/#/cabinet/users/"
+          routeToDetail="/cabinet/users/"
         />
       </CRow>
     )

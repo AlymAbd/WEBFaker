@@ -1,12 +1,18 @@
 import axios from 'axios'
-import { ACCESS_TOKEN, APP_URL } from './config'
+import { ACCESS_TOKEN, CSRF_HEADER_NAME, CSRF_COOKIE_NAME, APP_URL } from './config'
 import { cookies } from './utils'
-
-const getToken = () => {
-  return cookies.get(ACCESS_TOKEN) || sessionStorage.getItem(ACCESS_TOKEN)
-}
 
 axios.defaults.baseURL = APP_URL
 axios.defaults.withCredentials = true
 
-export default axios
+const base = axios.create({
+  xsrfCookieName: CSRF_COOKIE_NAME,
+  xsrfHeaderName: CSRF_HEADER_NAME,
+})
+
+base.defaults.headers.common = {
+  Accept: 'application/json',
+  ContentType: 'application/json',
+}
+
+export { axios, base }

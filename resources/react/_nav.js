@@ -32,8 +32,8 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: t('My courses'),
-    to: '/cabinet/my_courses',
+    name: t('AXIOS'),
+    to: '/cabinet/axios',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
   },
   {

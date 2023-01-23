@@ -26,15 +26,16 @@ class ObjectDetail extends FormGenerator {
       this.onSubmitErrorCallback = props.onFailSubmit
     }
 
-    this.buttons = (
-      <CButton color="success" type="submit">
-        {t('Save')}
-      </CButton>
-    )
-    if (this.id) {
+    if (this.id && this.model.methods.includes('PUT')) {
       this.buttons = (
         <CButton color="warning" type="submit">
           {t('Update')}
+        </CButton>
+      )
+    } else if (this.model.methods.includes('POST')) {
+      this.buttons = (
+        <CButton color="success" type="submit">
+          {t('Save')}
         </CButton>
       )
     }
@@ -58,7 +59,7 @@ class ObjectDetail extends FormGenerator {
       this.model
         .getDetailRecord(this.id, relations)
         .then((response) => {
-          let data = response.data.data
+          let data = response.data
           this.model.applyValues(data)
           this.setFormValues(this.model.getColumnValues())
         })

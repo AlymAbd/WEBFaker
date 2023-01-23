@@ -27,10 +27,9 @@ class TableGenerator extends CellGenerator {
         from: 1,
         last_page: 1,
         total: 0,
-        displayed: 0,
         sortBy: '',
         sortDest: '',
-        sortIcon: '',
+        sortIcon: cilCircle,
       },
       pagination: [],
       columns: [],
@@ -63,20 +62,12 @@ class TableGenerator extends CellGenerator {
       )
       .then((response) => {
         this.preparePagination(response.data)
-        this.generateRows(response.data.data)
+        this.generateRows(response.data.results)
       })
   }
 
   // table
   rowHeaderTemplate = (row) => {
-    let sortIcon = ''
-    if (this.state.sortBy == row.name) {
-      if (this.state.sortDest === 'asc') {
-        sortIcon = <CIcon icon={cilArrowCircleBottom} />
-      } else {
-        sortIcon = <CIcon icon={cilArrowCircleTop} />
-      }
-    }
     let rawRow = {
       key: row.name,
       label: (
@@ -87,11 +78,13 @@ class TableGenerator extends CellGenerator {
             </div>
           </CRow>
           <CRow>
-            <span className="float-end me-1">{sortIcon}</span>
+            <span className="float-end me-1">
+              <CIcon icon={this.state._queryParams.sortIcon} />
+            </span>
           </CRow>
         </div>
       ),
-      _props: { scope: 'col', color: 'dark', style: { cursor: 'pointer' } },
+      _props: { scope: 'col', color: 'primary', style: { cursor: 'pointer' } },
     }
     return rawRow
   }
@@ -123,22 +116,32 @@ class TableGenerator extends CellGenerator {
   // pagination & sorting
   sortByColumn = (e) => {
     let colName = e.target.id.split('__')[1]
-    if (this.state._queryParams.sortBy == colName) {
+
+    if (!colName) {
+      this.state._queryParams.sortIcon = cilCircle
+      this.state._queryParams.sortDest = null
+      this.state._queryParams.sortBy = null
+    } else {
+      this.state._queryParams.sortBy = colName
       switch (this.state._queryParams.sortDest) {
         case 'desc':
-          this.state._queryParams.orderDest = null
-          colName = null
+          this.state._queryParams.sortIcon = cilCircle
+          this.state._queryParams.sortDest = null
+          this.state._queryParams.sortBy = null
           break
         case 'asc':
-          this.state._queryParams.orderDest = 'desc'
+          this.state._queryParams.sortIcon = cilArrowCircleTop
+          this.state._queryParams.sortDest = 'desc'
           break
         default:
-          this.state._queryParams.orderDest = 'asc'
+          this.state._queryParams.sortIcon = cilArrowCircleBottom
+          this.state._queryParams.sortDest = 'asc'
           break
       }
     }
 
     this.setState({ _queryParams: this.state._queryParams }, () => {
+      console.log(this.state._queryParams.sortBy, this.state._queryParams.sortDest, this.state._queryParams.sortIcon)
       this.requestTable()
     })
   }
@@ -165,13 +168,15 @@ class TableGenerator extends CellGenerator {
   }
 
   preparePagination = (data) => {
-    this.state._queryParams.next = data.next_page_url !== null
-    this.state._queryParams.previous = data.prev_page_url !== null
+    if (!data) {
+      return
+    }
+    this.state._queryParams.next = data.next !== null
+    this.state._queryParams.previous = data.previous !== null
     this.state._queryParams.page = data.current_page
-    this.state._queryParams.from = data.from
-    this.state._queryParams.last_page = data.last_page
-    this.state._queryParams.total = data.total
-    this.state._queryParams.displayed = data.to
+    this.state._queryParams.from = data.start
+    this.state._queryParams.last_page = data.num_pages
+    this.state._queryParams.total = data.count
 
     this.state.pagination = []
     for (let ind = 0; ind < (this.state._queryParams.last_page > 10 ? 10 : this.state._queryParams.last_page); ind++) {
@@ -198,11 +203,7 @@ class TableGenerator extends CellGenerator {
         <CRow>
           <div className="table-responsive-lg">
             <CTable hover bordered columns={this.state.columns} items={this.state.items}>
-              <caption>
-                {t('Displayed records') + ': ' + this.state._queryParams.displayed}
-                <div></div>
-                {t('From') + ': ' + this.state._queryParams.total}
-              </caption>
+              <caption>{t('From') + ': ' + this.state._queryParams.total}</caption>
             </CTable>
           </div>
         </CRow>

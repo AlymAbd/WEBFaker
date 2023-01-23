@@ -10,4 +10,11 @@ const getRoutes = (type) => {
   })
 }
 
-export { getRoutes }
+const generateLink = (url) => {
+  if (url && ![url.slice(1, 2), url.slice(0, 1)].includes('#')) {
+    url = '/#/' + url
+  }
+  return url || '/#'
+}
+
+export { getRoutes, generateLink }

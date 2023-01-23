@@ -3,6 +3,8 @@ import Component from '../abstract/Component'
 import { cilMinus, cilCheckAlt } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import React from 'react'
+import { stripTrailingChar } from '../../service/utils'
+import { Link } from 'react-router-dom'
 
 class CellGenerator extends Component {
   constructor(props) {
@@ -43,7 +45,7 @@ class CellGenerator extends Component {
   }
 
   templateLink = (column, href, value) => {
-    return <a href={href}>{value}</a>
+    return <Link to={href}>{value}</Link>
   }
 
   templatePills = (column, value) => {
@@ -90,11 +92,11 @@ class CellGenerator extends Component {
         } else {
           value = ''
         }
-        href = new column.foreign().route + '/' + value
+        href = stripTrailingChar(new column.foreign().route, '/') + '/' + value
         cell = this.templateLink(column, href, label)
         break
       case Column.FORMAT_ID:
-        href = this.routeToDetail + '/' + value
+        href = stripTrailingChar(this.routeToDetail, '/') + '/' + value
         cell = this.templateLink(column, href, value)
         break
       case Column.FORMAT_IMAGE:

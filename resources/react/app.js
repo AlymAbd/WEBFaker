@@ -1,5 +1,6 @@
 import React, { Component, Suspense } from 'react'
 import { HashRouter, Routes } from 'react-router-dom'
+import { USER_DATA } from '@r/service/config'
 
 import './scss/style.scss'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -19,9 +20,12 @@ class App extends Component {
   constructor(props) {
     super(props)
 
+    if (AuthService.isAuthorized() && localStorage.getItem(USER_DATA) === null) {
+      AuthService.requestUserData()
+    }
+
     this.state = {
       currentUser: null,
-      accessToken: null,
     }
   }
 
@@ -33,27 +37,9 @@ class App extends Component {
         currentUser: user,
       })
     }
-
-    EventBus.on('logout', () => {
-      this.logout()
-    })
-  }
-
-  componentWillUnmount() {
-    EventBus.remove('logout')
-  }
-
-  logout() {
-    AuthService.logout()
-    this.setState({
-      currentUser: null,
-      accessToken: null,
-    })
   }
 
   render() {
-    const { accessToken, currentUser } = this.state
-
     return (
       <HashRouter>
         <Suspense fallback={loading}>

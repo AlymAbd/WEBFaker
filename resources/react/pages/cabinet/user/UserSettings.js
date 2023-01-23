@@ -28,7 +28,7 @@ class UserSettingsComponent extends Component {
   }
 
   onUploadCallback = (response) => {
-    auth({ path_to_photo: response.data.data[0] })
+    auth({ path_to_photo: response.data[0] })
   }
 
   onFailUploadCallback = (response) => {

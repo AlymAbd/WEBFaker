@@ -72,7 +72,7 @@ class InputFieldGenerator extends Component {
     if (!this.state.foreign.hasOwnProperty(column.name)) {
       column.requestOptions(this.state.model[column.name]).then((response) => {
         this.state.foreign[column.name] = column.required ? [] : [{ label: <i>{t('empty')}</i>, value: '' }]
-        response.data.data.forEach((row) => {
+        response.data.forEach((row) => {
           this.state.foreign[column.name].push({
             label: row.title,
             value: row.name,

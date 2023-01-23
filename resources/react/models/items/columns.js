@@ -1,4 +1,4 @@
-import axios from '@r/service/axios'
+import { axios } from '@r/service/axios'
 import Model from './model'
 
 class Column {
@@ -426,7 +426,7 @@ class CForeign extends Column {
   requestOptions = () => {
     let fmodel = new this.foreign()
     return new Promise((resolve, reject) => {
-      session
+      axios
         .get(fmodel.getRoute())
         .then((response) => {
           resolve(response)

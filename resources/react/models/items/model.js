@@ -1,10 +1,12 @@
-import axios from '@r/service/axios'
+import { axios } from '@r/service/axios'
 import { CJSON, Column } from './columns'
+import { stripTrailingChar } from '../../service/utils'
 
 class Model {
   route = ''
   description = ''
   columns = []
+  methods = ['GET', 'POST', 'PUT', 'DELETE']
 
   getColumns = (getAll = false) => {
     if (getAll) {
@@ -55,10 +57,7 @@ class Model {
 
   getRoute = (param = null) => {
     let url = this.route
-    if (param) {
-      url = url + '/detail/' + param
-    }
-    return url
+    return stripTrailingChar(url, '/') + '/' + (param || '')
   }
 
   handleData = (modelState) => {
@@ -114,15 +113,16 @@ class Model {
   getAllRecords = (limit = 10, page = 1, orderBy = null, orderDest = 'asc', otherFilters = null) => {
     let filters = ['limit=' + limit, 'page=' + page]
     if (orderBy) {
-      filters = filters.concat(filters, ['order_by=' + orderBy, 'order_dest=' + orderDest])
+      orderBy = orderDest === 'desc' ? orderBy : '-' + orderBy
+      filters = filters.concat(filters, ['ordering=' + orderBy])
     }
     if (otherFilters) {
       filters.concat(filters, otherFilters)
     }
 
     return new Promise((resolve, reject) => {
-      session
-        .get(this.getRoute() + '/?' + filters.join('&'))
+      axios
+        .get(this.getRoute() + '?' + filters.join('&'))
         .then((response) => {
           resolve(response)
         })
@@ -144,7 +144,7 @@ class Model {
       }
     }
     return new Promise((resolve, reject) => {
-      session
+      axios
         .get(route)
         .then((response) => {
           resolve(response)
@@ -157,7 +157,7 @@ class Model {
 
   createRecord = (data) => {
     return new Promise((resolve, reject) => {
-      session
+      axios
         .post(this.getRoute(), data)
         .then((response) => {
           resolve(response)
@@ -170,7 +170,7 @@ class Model {
 
   updateRecord = (data, id) => {
     return new Promise((resolve, reject) => {
-      session
+      axios
         .put(this.getRoute(id), data)
         .then((response) => {
           resolve(response)
@@ -183,7 +183,7 @@ class Model {
 
   uploadFile = (formData, id) => {
     return new Promise((resolve, reject) => {
-      session
+      axios
         .post(this.getRoute(id), formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -201,7 +201,7 @@ class Model {
 
   deleteRecord = (id) => {
     return new Promise((resolve, reject) => {
-      session
+      axios
         .delete(this.getRoute(id))
         .then((response) => {
           resolve(response)

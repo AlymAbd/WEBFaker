@@ -6,6 +6,7 @@ const auth = Auth.getCurrentUserData()
 
 // System pages
 const Page500 = React.lazy(() => import('@r/pages/Page500'))
+const Page404 = React.lazy(() => import('@r/pages/Page404'))
 
 // Pages
 const DefaultLayout = React.lazy(() => import('@r/pages/cabinet/layout/DefaultLayout'))
@@ -15,7 +16,7 @@ const routes = [
   <Route exact path="/" name="Home" element={<Login />} key="rHome" display="home" />,
   <Route exact path="/cabinet/*" name="Cabinet" element={<DefaultLayout />} key="rCabinet" display="home" authType="only" />,
   <Route exact path="/500" name="500" element={<Page500 />} key="r500" />,
-  <Route path="*" element={<Navigate replace to="/" />} key="rredirect404" />,
+  <Route path="*" element={<Page404 />} key="rredirect404" />,
 ]
 
 export default routes.filter((row) => {

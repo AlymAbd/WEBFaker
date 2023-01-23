@@ -1,52 +1,74 @@
-import axios from './axios'
+import { base } from './axios'
 import { ACCESS_TOKEN, USER_DATA, PATH_PHOTO, XSRF_TOKEN, NIGHT_MODE } from './config'
 import { cookies } from './utils'
 
 class AuthService {
-  _getToken() {
-    return cookies.get(ACCESS_TOKEN) || sessionStorage.getItem(ACCESS_TOKEN)
-  }
-
-  getAccessToken() {
-    const token = this._getToken()
-    if (token) {
-      return token
+  isAuthorized = () => {
+    const elem = document.getElementById('authorized')
+    if (elem !== null) {
+      return true
     } else {
-      this.logout()
       return false
     }
   }
 
-  getCurrentUserData(key = null) {
-    if (this.getAccessToken()) {
+  requestUserData = () => {
+    base.get('/accounts/settings/').then((response) => {
+      const data = response.data[0]['extra_data']
+      this.setCurrentUser({
+        email_verified: data['email_verified'],
+        email: data['email'],
+        locale: data['locale'],
+        path_to_photo: data['picture'],
+        name: data['name'],
+      })
+    })
+  }
+
+  getCurrentUserData = (key = null) => {
+    let value = false
+    if (this.isAuthorized()) {
       const data = JSON.parse(localStorage.getItem(USER_DATA))
       if (key) {
-        return data[key] || null
+        value = data[key] || null
       } else {
-        return data
+        value = data
       }
-    } else {
-      return false
     }
+    return value
   }
 
-  setCurrentUser(data) {
-    if (data.settings) {
-      this.handleUserSettings({ path_to_photo: data.settings.path_to_photo, ...data.settings.settings })
-    }
-    localStorage.setItem(USER_DATA, JSON.stringify(data))
+  setCurrentUser = ({ email_verified, email, locale, path_to_photo, name }) => {
+    this.handleUserSettings({ path_to_photo: path_to_photo, locale })
+    localStorage.setItem(
+      USER_DATA,
+      JSON.stringify({
+        email_verified: email_verified,
+        email: email,
+        locale: locale,
+        path_to_photo: path_to_photo,
+        name: name,
+      }),
+    )
   }
 
-  logout() {
+  logout = (reload = false) => {
     cookies.remove(ACCESS_TOKEN)
     cookies.remove(XSRF_TOKEN)
     localStorage.removeItem(NIGHT_MODE)
     localStorage.removeItem(PATH_PHOTO)
     localStorage.removeItem(USER_DATA)
+    base.post('/auth/logout/').then(() => {
+      if (reload === true) {
+        window.location.reload()
+      } else if (reload) {
+        window.location.href = reload
+      }
+    })
     return true
   }
 
-  handleUserSettings({ path_to_photo, lang }) {
+  handleUserSettings = ({ path_to_photo, lang }) => {
     if (path_to_photo) {
       localStorage.setItem(PATH_PHOTO, path_to_photo)
     }

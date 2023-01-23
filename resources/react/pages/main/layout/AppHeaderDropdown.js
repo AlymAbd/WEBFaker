@@ -1,25 +1,14 @@
 import React, { Component } from 'react'
 import { CAvatar, CDropdown, CDropdownDivider, CDropdownHeader, CDropdownItem, CDropdownMenu, CDropdownToggle } from '@coreui/react'
-import { cilUser, cilUserPlus, cilAccountLogout, cilHouse, cilLanguage } from '@coreui/icons'
+import { cilUser, cilAccountLogout, cilHouse, cilLanguage } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import LanguageChange from '@r/components/LanguageChange'
 import { getAvatar } from '@r/service/utils'
+import { generateLink } from '@r/routes/utils'
 import AuthService from '@r/service/auth'
 
 const t = global.$t
 let isAuthorized = AuthService.getCurrentUserData()
-
-const generateLink = (url) => {
-  if (url && ![url.slice(1, 2), url.slice(0, 1)].includes('#')) {
-    url = '/#/' + url
-  }
-  return url || '/#'
-}
-
-const logout = () => {
-  AuthService.logout()
-  window.location.reload()
-}
 
 const DropDownItems = () => {
   if (isAuthorized) {
@@ -28,14 +17,19 @@ const DropDownItems = () => {
         <CIcon icon={cilHouse} className="me-2" />
         {t('Cabinet')}
       </CDropdownItem>,
-      <CDropdownItem onClick={logout} key="logout">
+      <CDropdownItem
+        onClick={() => {
+          AuthService.logout()
+        }}
+        key="logout"
+      >
         <CIcon icon={cilAccountLogout} className="me-2" />
         {t('Logout')}
       </CDropdownItem>,
     ]
   } else {
     return [
-      <CDropdownItem href={generateLink('home')} key="login">
+      <CDropdownItem href={generateLink('/#/')} key="login">
         <CIcon icon={cilUser} className="me-2" />
         {t('Login')}
       </CDropdownItem>,
