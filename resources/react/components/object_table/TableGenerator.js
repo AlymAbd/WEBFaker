@@ -26,10 +26,11 @@ class TableGenerator extends CellGenerator {
         previous: false,
         next: false,
         from: 1,
-        last_page: 1,
+        lastPage: 1,
         total: 0,
         sortBy: '',
         sortDest: '',
+        filters: {},
       },
       pagination: [],
       columns: [],
@@ -41,10 +42,6 @@ class TableGenerator extends CellGenerator {
   componentDidMount = () => {
     this.generateHeader()
     this.requestTable()
-  }
-
-  getOtherFilters = () => {
-    return ''
   }
 
   columnsToRender = () => {
@@ -73,12 +70,12 @@ class TableGenerator extends CellGenerator {
 
   requestTable = () => {
     return this.model
-      .getAllRecords(
+      .getRecords(
         this.state._queryParams.limit,
         this.state._queryParams.page,
         this.state._queryParams.sortBy,
         this.state._queryParams.sortDest,
-        this.getOtherFilters(),
+        this.state._queryParams.filters,
       )
       .then((response) => {
         this.preparePagination(response.data)
@@ -95,7 +92,7 @@ class TableGenerator extends CellGenerator {
         <div>
           <CRow className="mb-3">
             <CCol>
-              <CFormInput type="text" size="sm"></CFormInput>
+              <CFormInput type="text" size="sm" disabled={!row.filterable} column__name={row.name} onBlur={this.filterByColumn}></CFormInput>
             </CCol>
           </CRow>
           <CRow>
@@ -138,7 +135,7 @@ class TableGenerator extends CellGenerator {
     })
     this.setState({ items: this.state.items })
   }
-  //
+  // end table
 
   // pagination & sorting
   sortByColumn = (column) => {
@@ -199,11 +196,11 @@ class TableGenerator extends CellGenerator {
     this.state._queryParams.previous = data.previous !== null
     this.state._queryParams.page = data.current_page
     this.state._queryParams.from = data.start
-    this.state._queryParams.last_page = data.num_pages
+    this.state._queryParams.lastPage = data.num_pages
     this.state._queryParams.total = data.count
 
     this.state.pagination = []
-    for (let ind = 0; ind < (this.state._queryParams.last_page > 10 ? 10 : this.state._queryParams.last_page); ind++) {
+    for (let ind = 0; ind < (this.state._queryParams.lastPage > 10 ? 10 : this.state._queryParams.lastPage); ind++) {
       this.state.pagination.push(
         <CButton value={ind + 1} key={'pagination_' + ind} onClick={this.paginate} disabled={ind + 1 == this.state._queryParams.page}>
           {ind + 1}
@@ -212,16 +209,47 @@ class TableGenerator extends CellGenerator {
     }
     this.setState({ _queryParams: this.state._queryParams, pagination: this.state.pagination })
   }
-  //
+  // end pagination
+
+  // filtration
+  filterByColumn = (e) => {
+    let value = e.target.value
+    let column = e.target.attributes['column__name']['value'] || null
+    if ((column !== null || column !== undefined) && value) {
+      this.state._queryParams.filters[column] = value
+      this.setState({ _queryParams: this.state._queryParams }, () => {
+        this.requestTable()
+      })
+    } else if (this.state._queryParams.filters[column]) {
+      delete this.state._queryParams.filters[column]
+      this.requestTable()
+    }
+  }
+
+  clearFilter = (e) => {
+    this.state._queryParams.filters = []
+    this.setState({ _queryParams: this.state._queryParams }, () => {
+      this.requestTable()
+    })
+  }
+  // end filtration
 
   render() {
     return (
       <CCol>
-        <CRow className="mb-1">
-          <CCol xs={1}>
-            <CButton href={this.routeToCreate} style={{ display: this.routeToCreate ? '' : 'none' }}>
-              {t('Create')}
-            </CButton>
+        <CRow className="mb-2">
+          <CCol xs={3}>
+            <CButtonGroup role="group">
+              <CButton color="danger" onClick={this.clearFilter}>
+                {t('Clear filters')}
+              </CButton>
+              <CButton color="warning" onClick={this.clearFilter}>
+                {t('Clear ordering')}
+              </CButton>
+              <CButton color="alert" href={this.routeToCreate} style={{ display: this.routeToCreate ? '' : 'none' }}>
+                {t('Create')}
+              </CButton>
+            </CButtonGroup>
           </CCol>
         </CRow>
         <CRow>

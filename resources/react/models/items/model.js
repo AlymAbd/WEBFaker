@@ -110,19 +110,20 @@ class Model {
     })
   }
 
-  getAllRecords = (limit = 10, page = 1, orderBy = null, orderDest = 'asc', otherFilters = null) => {
-    let filters = ['limit=' + limit, 'page=' + page]
+  getRecords = (limit = 10, page = 1, orderBy = null, orderDest = 'asc', filters = {}) => {
+    let query = ['limit=' + limit, 'page=' + page]
     if (orderBy) {
       orderBy = orderDest === 'desc' ? orderBy : '-' + orderBy
-      filters = filters.concat(filters, ['ordering=' + orderBy])
+      query = query.concat(['ordering=' + orderBy])
     }
-    if (otherFilters) {
-      filters.concat(filters, otherFilters)
+    if (Object.keys(filters).length > 0) {
+      Object.keys(filters).forEach((filter) => {
+        query.push([filter, filters[filter]].join('='))
+      })
     }
-
     return new Promise((resolve, reject) => {
       axios
-        .get(this.getRoute() + '?' + filters.join('&'))
+        .get(this.getRoute() + '?' + query.join('&'))
         .then((response) => {
           resolve(response)
         })
