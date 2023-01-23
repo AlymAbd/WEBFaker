@@ -25,6 +25,8 @@ google-auth-httplib2 = "^0.1.0"
 google-auth-oauthlib = "^0.8.0"
 google-auth = "^2.16.0"
 django-allauth = "^0.52.0"
+drf-extensions = "^0.7.1"
+edx-drf-extensions = "^8.4.1"
 
 [tool.poetry.group.dev.dependencies]
 notebook = "^6.5.2"

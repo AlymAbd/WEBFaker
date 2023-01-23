@@ -44,11 +44,14 @@ EXPECT_CHOICES = [
 class Instances(models.Model):
     https = models.BooleanField(default=True)
     host = models.CharField(max_length=128)
-    users = models.ManyToManyField(User)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     date_format = models.CharField(max_length=50, default='%Y-%m-%d')
     datetime_format = models.CharField(max_length=50, default='%Y-%m-%d %H:%M:%S')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('https', 'host', 'user')
 
 class Requests(models.Model):
     title = models.CharField(max_length=128)

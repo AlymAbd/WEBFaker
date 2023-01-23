@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from fake.custom import env
 from pathlib import Path
 import os
+from random import randint
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -54,6 +55,18 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'edx_rest_framework_extensions.paginators.DefaultPagination',
+    'PAGE_SIZE': 10
+}
+
+DEFAULT_PERMISSION_CLASSES = [
+    'DjangoModelPermissionsOrAnonReadOnly'
+]
+
 OAUTH_GOOGLE_CLIENT_ID = env('OAUTH_GOOGLE_CLIENT_ID')
 OAUTH_GOOGLE_KEY = env('OAUTH_GOOGLE_CLIENT_SECRET')
 
@@ -73,8 +86,9 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+RND = randint(10000, 99999)
+LOGIN_REDIRECT_URL = '/#/cabinet/dashboard'
+LOGOUT_REDIRECT_URL = '/#/logout'
 SITE_ID = 2
 
 INSTALLED_APPS += APPS
