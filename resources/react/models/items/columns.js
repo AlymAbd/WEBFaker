@@ -43,8 +43,8 @@ class Column {
   _disabled = false
   _value = null
   _settedValues = false
-  _canSort = false
-  _canFilter = false
+  _canSort = true
+  _canFilter = true
 
   constructor(name, title = null) {
     this._name = name
@@ -156,13 +156,13 @@ class Column {
     return this
   }
 
-  asFilterable = () => {
-    this._canFilter = true
+  asFilterable = (value = true) => {
+    this._canFilter = value
     return this
   }
 
-  asSortable = () => {
-    this._canSort = true
+  asSortable = (value = true) => {
+    this._canSort = value
     return this
   }
 

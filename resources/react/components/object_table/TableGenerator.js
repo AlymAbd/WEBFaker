@@ -1,8 +1,9 @@
 import CellGenerator from './CellGenerator'
-import { CButton, CButtonToolbar, CRow, CCol, CTable, CButtonGroup } from '@coreui/react'
-import { cilArrowCircleBottom, cilArrowCircleTop, cilCircle } from '@coreui/icons'
-import CIcon from '@coreui/icons-react'
+import { CButton, CButtonToolbar, CRow, CCol, CTable, CButtonGroup, CFormInput } from '@coreui/react'
+
 import React from 'react'
+import CIcon from '@coreui/icons-react'
+import { cilArrowCircleBottom, cilArrowCircleTop, cilCircle, cilXCircle } from '@coreui/icons'
 
 const t = global.$t
 
@@ -29,7 +30,6 @@ class TableGenerator extends CellGenerator {
         total: 0,
         sortBy: '',
         sortDest: '',
-        sortIcon: cilCircle,
       },
       pagination: [],
       columns: [],
@@ -51,6 +51,26 @@ class TableGenerator extends CellGenerator {
     return this.model.getColumns()
   }
 
+  getSortIcon = (column) => {
+    let icon = cilCircle
+    if (column.name === this.state._queryParams.sortBy) {
+      switch (this.state._queryParams.sortDest) {
+        case 'asc':
+          icon = cilArrowCircleBottom
+          break
+        case 'desc':
+          icon = cilArrowCircleTop
+          break
+        default:
+          icon = cilCircle
+          break
+      }
+    } else if (!column.sortable) {
+      icon = cilXCircle
+    }
+    return <CIcon icon={icon} />
+  }
+
   requestTable = () => {
     return this.model
       .getAllRecords(
@@ -68,28 +88,35 @@ class TableGenerator extends CellGenerator {
 
   // table
   rowHeaderTemplate = (row) => {
-    let rawRow = {
+    let icon = this.getSortIcon(row)
+    return {
       key: row.name,
       label: (
         <div>
-          <CRow>
-            <div id={'headercell__' + row.name} className="align-text-top" onClick={this.sortByColumn}>
-              {row.title}
-            </div>
+          <CRow className="mb-3">
+            <CCol>
+              <CFormInput type="text" size="sm"></CFormInput>
+            </CCol>
           </CRow>
           <CRow>
-            <span className="float-end me-1">
-              <CIcon icon={this.state._queryParams.sortIcon} />
-            </span>
+            <div
+              onClick={() => {
+                this.sortByColumn(row)
+              }}
+            >
+              <div className="align-text-top">{row.title}</div>
+              {icon}
+            </div>
           </CRow>
         </div>
       ),
       _props: { scope: 'col', color: 'primary', style: { cursor: 'pointer' } },
     }
-    return rawRow
   }
 
   generateHeader = () => {
+    this.state.columnsToRequest = []
+    this.state.columns = []
     this.columnsToRender().forEach((column) => {
       this.state.columnsToRequest.push(column.name)
       this.state.columns.push(this.rowHeaderTemplate(column))
@@ -114,34 +141,31 @@ class TableGenerator extends CellGenerator {
   //
 
   // pagination & sorting
-  sortByColumn = (e) => {
-    let colName = e.target.id.split('__')[1]
-
+  sortByColumn = (column) => {
+    const colName = column.name
     if (!colName) {
-      this.state._queryParams.sortIcon = cilCircle
       this.state._queryParams.sortDest = null
       this.state._queryParams.sortBy = null
+    } else if (!column.sortable) {
+      return
     } else {
       this.state._queryParams.sortBy = colName
       switch (this.state._queryParams.sortDest) {
         case 'desc':
-          this.state._queryParams.sortIcon = cilCircle
           this.state._queryParams.sortDest = null
           this.state._queryParams.sortBy = null
           break
         case 'asc':
-          this.state._queryParams.sortIcon = cilArrowCircleTop
           this.state._queryParams.sortDest = 'desc'
           break
         default:
-          this.state._queryParams.sortIcon = cilArrowCircleBottom
           this.state._queryParams.sortDest = 'asc'
           break
       }
     }
 
     this.setState({ _queryParams: this.state._queryParams }, () => {
-      console.log(this.state._queryParams.sortBy, this.state._queryParams.sortDest, this.state._queryParams.sortIcon)
+      this.generateHeader()
       this.requestTable()
     })
   }

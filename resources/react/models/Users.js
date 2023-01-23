@@ -6,7 +6,7 @@ class Users extends Model {
   description = 'User list'
 
   columns = [
-    CID.new('id', '#'),
+    CID.new('id', '#').asSortable(false),
     CString.new('username', 'Username').asRequired(),
     CString.new('email', 'Email').asEmail().asDisabled(),
     CDateTime.new('date_joined', 'Date joined').asDisabled(),
