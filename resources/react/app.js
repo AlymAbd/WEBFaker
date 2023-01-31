@@ -1,6 +1,6 @@
 import React, { Component, Suspense } from 'react'
 import { HashRouter, Routes } from 'react-router-dom'
-import { USER_DATA } from '@r/service/config'
+import { USER_DATA, APP_NAME } from '@r/service/config'
 
 import './scss/style.scss'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -27,6 +27,8 @@ class App extends Component {
     this.state = {
       currentUser: null,
     }
+
+    document.title = APP_NAME
   }
 
   componentDidMount() {

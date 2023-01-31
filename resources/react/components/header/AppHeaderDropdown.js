@@ -26,7 +26,7 @@ const AppHeaderDropdown = () => {
         <CDropdownDivider />
         <CDropdownItem
           onClick={() => {
-            AuthService.logout('/#/')
+            AuthService.logout('/')
           }}
         >
           <CIcon icon={cilLockLocked} className="me-2" />

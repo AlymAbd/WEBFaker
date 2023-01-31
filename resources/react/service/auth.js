@@ -14,7 +14,7 @@ class AuthService {
 
   requestUserData = () => {
     base.get('/accounts/settings/').then((response) => {
-      const data = response.data[0]['extra_data']
+      const data = response.data.results[0]['extra_data']
       this.setCurrentUser({
         email_verified: data['email_verified'],
         email: data['email'],
@@ -22,6 +22,7 @@ class AuthService {
         path_to_photo: data['picture'],
         name: data['name'],
       })
+      window.location.reload()
     })
   }
 
@@ -62,7 +63,7 @@ class AuthService {
       if (reload === true) {
         window.location.reload()
       } else if (reload) {
-        window.location.href = reload
+        window.location.replace(reload)
       }
     })
     return true
