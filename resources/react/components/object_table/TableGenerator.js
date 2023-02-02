@@ -5,6 +5,8 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { cilArrowCircleBottom, cilArrowCircleTop, cilCircle, cilXCircle } from '@coreui/icons'
 
+import FilterGenerator from './FilterGenerator'
+
 const t = global.$t
 
 class TableGenerator extends CellGenerator {
@@ -40,8 +42,15 @@ class TableGenerator extends CellGenerator {
   }
 
   componentDidMount = () => {
-    this.generateHeader()
+    this.createFilterState()
     this.requestTable()
+  }
+
+  createFilterState = () => {
+    this.model.getColumns().forEach((row) => {
+      this.state._queryParams.filters[row.name] = ''
+    })
+    this.setState({ _queryParams: this.state._queryParams })
   }
 
   columnsToRender = () => {
@@ -69,6 +78,8 @@ class TableGenerator extends CellGenerator {
   }
 
   requestTable = () => {
+    this.generateHeader()
+
     return this.model
       .getRecords(
         this.state._queryParams.limit,
@@ -92,7 +103,12 @@ class TableGenerator extends CellGenerator {
         <div>
           <CRow className="mb-3">
             <CCol>
-              <CFormInput type="text" size="sm" disabled={!row.filterable} column__name={row.name} onBlur={this.filterByColumn}></CFormInput>
+              <FilterGenerator
+                key={row.name + '__' + this.state._queryParams.filters[row.name]}
+                valuex={this.state._queryParams.filters[row.name]}
+                column={row}
+                updateStateCallback={this.filterByColumn}
+              />
             </CCol>
           </CRow>
           <CRow>
@@ -162,7 +178,6 @@ class TableGenerator extends CellGenerator {
     }
 
     this.setState({ _queryParams: this.state._queryParams }, () => {
-      this.generateHeader()
       this.requestTable()
     })
   }
@@ -212,22 +227,16 @@ class TableGenerator extends CellGenerator {
   // end pagination
 
   // filtration
-  filterByColumn = (e) => {
-    let value = e.target.value
-    let column = e.target.attributes['column__name']['value'] || null
-    if ((column !== null || column !== undefined) && value) {
-      this.state._queryParams.filters[column] = value
-      this.setState({ _queryParams: this.state._queryParams }, () => {
-        this.requestTable()
-      })
-    } else if (this.state._queryParams.filters[column]) {
-      delete this.state._queryParams.filters[column]
+  filterByColumn = (obj) => {
+    this.state._queryParams.filters[obj.column] = obj.value
+    this.setState({ _queryParams: this.state._queryParams }, () => {
+      console.log(this.state._queryParams.filters)
       this.requestTable()
-    }
+    })
   }
 
-  clearFilter = (e) => {
-    this.state._queryParams.filters = []
+  clearFilter = () => {
+    this.createFilterState()
     this.setState({ _queryParams: this.state._queryParams }, () => {
       this.requestTable()
     })
