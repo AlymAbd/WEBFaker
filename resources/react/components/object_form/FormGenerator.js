@@ -1,5 +1,5 @@
 import InputFieldGenerator from './InputFieldGenerator'
-import { CForm, CCol, CRow, CButtonGroup, CButton } from '@coreui/react'
+import { CForm, CCard, CCardBody, CCardFooter, CCardHeader, CCol, CRow, CButtonGroup, CButton, CAlert } from '@coreui/react'
 import { Column } from '../../models/items'
 
 const t = global.$t
@@ -146,10 +146,20 @@ class FormGenerator extends InputFieldGenerator {
     let errors = error.response.data
     Object.keys(this.state.validation).forEach((key) => {
       if (errors.hasOwnProperty(key)) {
-        this.state.validation[key] = errors[key].join('\n')
+        if (errors[key].hasOwnProperty('non_field_errors')) {
+          this.setState({ notification: errors[key]['non_field_errors'] })
+        } else {
+          this.state.validation[key] = Array.isArray(errors[key]) ? errors[key].join('\n') : errors[key]
+        }
       }
     })
-    this.setState({ validation: this.state.validation })
+    this.setState({ validation: this.state.validation }, () => {
+      console.log(this.state.notification !== '')
+    })
+  }
+
+  handleArrayError = (error) => {
+    //
   }
 
   onSubmitCallback = (response) => {
@@ -157,7 +167,7 @@ class FormGenerator extends InputFieldGenerator {
   }
 
   onSubmitErrorCallback = (response) => {
-    //
+    console.log(this.state.validation)
   }
 
   onUploadCallback = (response) => {
@@ -180,15 +190,9 @@ class FormGenerator extends InputFieldGenerator {
 
   getValuesForRequest = () => {
     let formData = {}
-    Object.keys(this.state.model).forEach((record) => {
-      if (record.includes('__')) {
-        let [parent, child] = record.split('__')
-        if (!formData.hasOwnProperty(parent)) {
-          formData[parent] = {}
-        }
-        formData[parent][child] = this.state.model[record]
-      } else {
-        formData[record] = this.state.model[record]
+    this.model.getColumns().forEach((col, i) => {
+      if (col.format !== Column.FORMAT_ID && !this.id && !col.disabled) {
+        formData[col.name] = this.state.model[col.name]
       }
     })
     return formData
@@ -199,24 +203,31 @@ class FormGenerator extends InputFieldGenerator {
     this.model.getColumns().forEach((col, i) => {
       form.push(this.generateField(col))
     })
+    const alert = <CAlert color="danger">{this.state.notification}</CAlert>
+
     return (
-      <div className="mb-4">
-        {this.genereateTopBar()}
-        <CForm key="form1" className="row g-3 needs-validation" onSubmit={this.submitForm}>
-          <h5>{this.title}</h5>
-          <p>
-            <strong className="text-medium-emphasis">{this.description}</strong>
-          </p>
-          {form}
-          <CRow>
-            <CCol xs={4}>
-              <CButtonGroup role="group" aria-label="Basic outlined example">
-                {this.generateButtons()}
-              </CButtonGroup>
-            </CCol>
-          </CRow>
-        </CForm>
-        {this.genereateBottomBar()}
+      <div>
+        <div>{this.state.notification !== '' ? alert : ''}</div>
+        <div className="mb-4">
+          {this.genereateTopBar()}
+          <CCard>
+            <CCardHeader>
+              <h5>{this.title}</h5>
+              <strong className="text-medium-emphasis">{this.description}</strong>
+            </CCardHeader>
+            <CCardBody>
+              <CForm key="form1" className="row g-3 needs-validation" onSubmit={this.submitForm}>
+                {form}
+              </CForm>
+              <CCardFooter>
+                <CButtonGroup role="group" aria-label="Basic outlined example">
+                  {this.generateButtons()}
+                </CButtonGroup>
+              </CCardFooter>
+            </CCardBody>
+          </CCard>
+          {this.genereateBottomBar()}
+        </div>
       </div>
     )
   }

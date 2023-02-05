@@ -7,7 +7,7 @@ from api.v1 import serializers
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = User.objects.all()
+    queryset = User.objects
     serializer_class = serializers.UserSerializer
     filter_class = serializers.UserFilter
     ordering_fields = '__all__'

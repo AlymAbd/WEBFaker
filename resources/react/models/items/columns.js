@@ -30,6 +30,7 @@ class Column {
   static FORMAT_JSON = 'json'
   static FORMAT_IMAGE = 'image'
   static FORMAT_ID = 'cid'
+  static FORMAT_URL = 'url'
 
   _name = null
   _format = null
@@ -315,7 +316,7 @@ class CDecimal extends Column {
 }
 
 class CDateTime extends Column {
-  _default = ''
+  _default = null
 
   constructor(name, title = null) {
     super(name, title)
@@ -324,7 +325,12 @@ class CDateTime extends Column {
   }
 
   serialize = (value) => {
-    return new Date(value)
+    if (value || (typeof value === 'string' && value.length == 0) || value != undefined || value != null) {
+      console.log(value == null)
+      return new Date(value)
+    } else {
+      return null
+    }
   }
 
   toNormalDate = (value) => {
@@ -341,17 +347,11 @@ class CDateTime extends Column {
   }
 }
 
-class CDate extends Column {
-  _default = ''
-
+class CDate extends CDateTime {
   constructor(name, title = null) {
     super(name, title)
     this.setType(Column.TYPE_DATE)
     this.setFormat(Column.FORMAT_DATE)
-  }
-
-  serialize = (value) => {
-    return new Date(value)
   }
 
   withTime = () => {
@@ -401,8 +401,9 @@ class CForeign extends Column {
   _foreign = null
   _where = null
   _default = ''
+  _displayedName = {}
 
-  constructor(name, title = null) {
+  constructor(name, title = null, readOnlyFieldName = null) {
     super(name, title)
     this.setType(Column.TYPE_OBJECTARRAY)
     this.setFormat(Column.FORMAT_FOREIGN)
@@ -420,6 +421,11 @@ class CForeign extends Column {
 
   setFilter = (value) => {
     this._where = value
+    return this
+  }
+
+  setDisplayedValue = (where, value) => {
+    this._displayedName[where] = value
     return this
   }
 
@@ -447,6 +453,10 @@ class CForeign extends Column {
 
   get requestName() {
     return this._requestName
+  }
+
+  get whereDisplayed() {
+    return this._displayedName
   }
 }
 

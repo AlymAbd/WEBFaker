@@ -6,7 +6,7 @@ import CIcon from '@coreui/icons-react'
 import { cilArrowCircleBottom, cilArrowCircleTop, cilCircle, cilXCircle } from '@coreui/icons'
 
 import FilterGenerator from './FilterGenerator'
-
+import { Outlet, Link } from 'react-router-dom'
 const t = global.$t
 
 class TableGenerator extends CellGenerator {
@@ -247,16 +247,22 @@ class TableGenerator extends CellGenerator {
     return (
       <CCol>
         <CRow className="mb-2">
-          <CCol xs={3}>
+          <CCol xs={4}>
+            <CButtonGroup role="group">
+              <Link style={{ display: this.routeToCreate ? '' : 'none' }} className="btn btn-primary" role="button" to={this.routeToCreate}>
+                {t('Create')}
+              </Link>
+            </CButtonGroup>
+          </CCol>
+        </CRow>
+        <CRow className="mb-2">
+          <CCol xs={4}>
             <CButtonGroup role="group">
               <CButton color="danger" onClick={this.clearFilter}>
                 {t('Clear filters')}
               </CButton>
               <CButton color="warning" onClick={this.clearFilter}>
                 {t('Clear ordering')}
-              </CButton>
-              <CButton color="alert" href={this.routeToCreate} style={{ display: this.routeToCreate ? '' : 'none' }}>
-                {t('Create')}
               </CButton>
             </CButtonGroup>
           </CCol>

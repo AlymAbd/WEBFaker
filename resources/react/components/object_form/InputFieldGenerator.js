@@ -2,7 +2,7 @@ import CIcon from '@coreui/icons-react'
 
 import FieldGenerator from './FieldGenerator'
 
-class InputFieldGenerator extends FieldGenerator {
+export default class InputFieldGenerator extends FieldGenerator {
   constructor(props) {
     super(props)
     this.model = new props.model()
@@ -10,6 +10,7 @@ class InputFieldGenerator extends FieldGenerator {
     this.state = {
       model: this.model.getColumnValues(),
       validation: this.model.getColumnValues(null, true),
+      notification: '',
       foreign: {},
       preview: {},
       files: {
@@ -37,5 +38,3 @@ class InputFieldGenerator extends FieldGenerator {
     )
   }
 }
-
-export default InputFieldGenerator

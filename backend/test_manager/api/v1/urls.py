@@ -3,19 +3,13 @@ from rest_framework import routers, viewsets
 from test_manager.api.v1 import serializers
 from test_manager import models
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import F
 
 
 class InstanceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.InstanceSerializer
-    queryset = models.Instances.objects
-
-    def get_queryset(self):
-        self.queryset = models.Instances.objects.filter(user__id=self.request.user)
-        return super().get_queryset()
-
-    def perform_create(self, serializer):
-        return super().perform_create(serializer)
+    queryset = models.Instances.objects.prefetch_related('user').all()
 
 class RequestsViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]

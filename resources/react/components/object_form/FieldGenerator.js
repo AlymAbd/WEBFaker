@@ -18,7 +18,7 @@ import {
 } from '@coreui/react'
 
 import DatePicker from 'react-datepicker'
-import Select, { components } from 'react-select'
+import Select from 'react-select'
 
 const t = global.$t
 
@@ -59,10 +59,10 @@ class FieldGenerator extends Component {
     if (!this.state.foreign.hasOwnProperty(column.name)) {
       column.requestOptions(this.state.model[column.name]).then((response) => {
         this.state.foreign[column.name] = column.required ? [] : [{ label: <i>{t('empty')}</i>, value: '' }]
-        response.data.forEach((row) => {
+        response.data.results.forEach((row) => {
           this.state.foreign[column.name].push({
-            label: row.title,
-            value: row.name,
+            label: row.username,
+            value: row.id,
           })
         })
         this.setState({ foreign: this.state.foreign })
@@ -252,7 +252,9 @@ class FieldGenerator extends Component {
       onChange: this.handleInput,
       invalid: this.state.validation[column.name] !== '',
       value: this.state.model[column.name],
-      size: 'sm',
+    }
+    if (!this.model.methods.includes('POST', 'PUT')) {
+      attributes['disabled'] = true
     }
     let result = null
 
@@ -316,6 +318,7 @@ class FieldGenerator extends Component {
         attributes['onChange'] = this.handleImage
         result = this.makeImagePicker(column, attributes)
         break
+      case Column.FORMAT_RJSON:
       case Column.FORMAT_JSON:
         result = this.makeJson(column, attributes)
         break

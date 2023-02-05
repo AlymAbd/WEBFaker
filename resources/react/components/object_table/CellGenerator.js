@@ -5,6 +5,7 @@ import CIcon from '@coreui/icons-react'
 import React from 'react'
 import { stripTrailingChar } from '../../service/utils'
 import { Link } from 'react-router-dom'
+import { TYPE_TABLE } from '@r/service/config'
 
 class CellGenerator extends Component {
   constructor(props) {
@@ -81,16 +82,11 @@ class CellGenerator extends Component {
         cell = this.templateLink(column, value, value)
         break
       case Column.FORMAT_FOREIGN:
+        const colName = column.whereDisplayed[TYPE_TABLE] ?? null
         let label = ''
-        if (value !== null && typeof value === 'object' && value.name) {
-          if (value.title) {
-            label = value.title
-          } else {
-            label = value.name
-          }
-          value = value.name
-        } else {
-          value = ''
+        if (colName) {
+          label = value[colName]
+          value = value['id']
         }
         href = stripTrailingChar(new column.foreign().route, '/') + '/' + value
         cell = this.templateLink(column, href, label)

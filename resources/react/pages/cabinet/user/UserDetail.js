@@ -1,31 +1,12 @@
 import User from '@r/models/Users'
 import ObjectDetail from '@r/components/ObjectDetail'
-import { Component } from 'react'
 import { CCol, CRow } from '@coreui/react'
 import withRouter from '@r/components/WithRouter'
+import AbsFormDetail from '../../../components/abstract/Form'
 
-class UserComponent extends Component {
+class UserComponent extends AbsFormDetail {
   constructor(props) {
     super(props)
-    let { id } = props.params
-    this.state = {
-      id: id,
-    }
-  }
-  onSubmitCallback = (response) => {
-    //
-  }
-
-  onFailSubmitCallback = (response) => {
-    //
-  }
-
-  onUploadCallback = (response) => {
-    //
-  }
-
-  onFailUploadCallback = (response) => {
-    //
   }
 
   render() {

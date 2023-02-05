@@ -1,26 +1,19 @@
-import UserSettings from '@r/models/UserSettings'
+import Instances from '../../../models/Instances'
 import ObjectDetail from '@r/components/ObjectDetail'
 import { Component } from 'react'
 import { CCol, CRow } from '@coreui/react'
 import withRouter from '@r/components/WithRouter'
-import AuthService from '@r/service/auth'
 
-const auth = AuthService.handleUserSettings
-
-class UserSettingsComponent extends Component {
+class InstanceDetailComponent extends Component {
   constructor(props) {
     super(props)
-
     let { id } = props.params
     this.state = {
       id: id,
     }
   }
-
   onSubmitCallback = (response) => {
-    response = response.data
-    auth({ path_to_photo: response['path_to_photo'], lang: response['settings__lang'], dark_mode: response['settings__dark_mode'] })
-    window.location.reload()
+    //
   }
 
   onFailSubmitCallback = (response) => {
@@ -28,7 +21,7 @@ class UserSettingsComponent extends Component {
   }
 
   onUploadCallback = (response) => {
-    auth({ path_to_photo: response.data[0] })
+    //
   }
 
   onFailUploadCallback = (response) => {
@@ -41,7 +34,7 @@ class UserSettingsComponent extends Component {
         <CCol xs={6}>
           <ObjectDetail
             id={this.state.id}
-            model={UserSettings}
+            model={Instances}
             onUpload={this.onUploadCallback}
             onFailUpload={this.onFailUploadCallback}
             onSubmit={this.onSubmitCallback}
@@ -53,4 +46,4 @@ class UserSettingsComponent extends Component {
   }
 }
 
-export default withRouter(UserSettingsComponent)
+export default withRouter(InstanceDetailComponent)

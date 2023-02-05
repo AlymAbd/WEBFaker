@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from test_manager import models
+from api.v1.serializers import UserSerializer
 
 
 class InstanceSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
     class Meta:
         model = models.Instances
-        fields = ['https', 'host', 'user', 'date_format', 'datetime_format']
+        fields = '__all__'
 
 class RequestsSerializer(serializers.ModelSerializer):
     class Meta:

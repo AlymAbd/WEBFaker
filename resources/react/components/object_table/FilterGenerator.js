@@ -2,6 +2,9 @@ import DatePicker from 'react-datepicker'
 import { CFormCheck, CFormInput } from '@coreui/react'
 import FieldGenerator from '../object_form/FieldGenerator'
 import { Column } from '../../models/items'
+import Select from 'react-select'
+
+const t = global.$t
 
 class FilterGenerator extends FieldGenerator {
   columnName = null
@@ -14,6 +17,7 @@ class FilterGenerator extends FieldGenerator {
   constructor(props) {
     super(props)
     this.baseHandler = this.baseHandler.bind(this)
+    this.state = {}
   }
 
   /**
@@ -76,6 +80,40 @@ class FilterGenerator extends FieldGenerator {
       }
     }
     return this.toFormInput(<DatePicker {...attributes} />, column, attributes)
+  }
+
+  /**
+   *
+   * @param {Column} column
+   * @param {*} attributes
+   */
+  makeForeign = (column, attributes) => {
+    delete attributes.value
+    let selectOptions = []
+
+    column.requestOptions().then((response) => {
+      response.data.results.forEach((row) => {
+        selectOptions.push({
+          label: row.username,
+          value: row.id,
+        })
+      })
+    })
+
+    return this.toFormInput(
+      <Select
+        name={column.name}
+        value={selectOptions.find((item) => item.value === this.props.valuex)}
+        isSearchable
+        options={selectOptions}
+        onChange={(e) => {
+          this.baseHandler(e.value)
+        }}
+        {...attributes}
+      />,
+      column,
+      attributes,
+    )
   }
 
   /**

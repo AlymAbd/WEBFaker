@@ -1,4 +1,4 @@
-import { axios } from '@r/service/axios'
+import { base } from '@r/service/axios'
 import { CJSON, Column } from './columns'
 import { stripTrailingChar } from '../../service/utils'
 
@@ -9,7 +9,7 @@ class Model {
   methods = ['GET', 'POST', 'PUT', 'DELETE']
 
   getColumns = (getAll = false) => {
-    if (getAll) {
+    if (getAll === true) {
       return this.columns
     } else {
       return this.columns.filter((row) => {
@@ -122,7 +122,7 @@ class Model {
       })
     }
     return new Promise((resolve, reject) => {
-      axios
+      base
         .get(this.getRoute() + '?' + query.join('&'))
         .then((response) => {
           resolve(response)
@@ -145,7 +145,7 @@ class Model {
       }
     }
     return new Promise((resolve, reject) => {
-      axios
+      base
         .get(route)
         .then((response) => {
           resolve(response)
@@ -158,7 +158,7 @@ class Model {
 
   createRecord = (data) => {
     return new Promise((resolve, reject) => {
-      axios
+      base
         .post(this.getRoute(), data)
         .then((response) => {
           resolve(response)
@@ -171,7 +171,7 @@ class Model {
 
   updateRecord = (data, id) => {
     return new Promise((resolve, reject) => {
-      axios
+      base
         .put(this.getRoute(id), data)
         .then((response) => {
           resolve(response)
@@ -184,7 +184,7 @@ class Model {
 
   uploadFile = (formData, id) => {
     return new Promise((resolve, reject) => {
-      axios
+      base
         .post(this.getRoute(id), formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -202,7 +202,7 @@ class Model {
 
   deleteRecord = (id) => {
     return new Promise((resolve, reject) => {
-      axios
+      base
         .delete(this.getRoute(id))
         .then((response) => {
           resolve(response)

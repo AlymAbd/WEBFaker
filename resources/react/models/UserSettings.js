@@ -25,7 +25,6 @@ class UserSettings extends Model {
       CString.new('location', t('Location')).asDisabled(),
       CBool.new('email_notifications', t('Email notification')),
       CBool.new('telegram_notifications', t('Telegram notification')),
-      ,
       CString.new('telegram_id', t('Telegram ID')).asDisabled(),
     ]),
     CDateTime.new('created_at', t('Created')).asDisabled().asHidden(),

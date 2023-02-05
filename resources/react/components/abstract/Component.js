@@ -1,9 +1,9 @@
 import { Component } from 'react'
 
-class AbstractComponent extends Component {
+class AbsComponent extends Component {
   getProp = (name, onelse = null) => {
     return this.props.hasOwnProperty(name) ? (this.props[name] !== null ? this.props[name] : onelse) : onelse
   }
 }
 
-export default AbstractComponent
+export default AbsComponent

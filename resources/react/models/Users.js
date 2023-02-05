@@ -3,7 +3,7 @@ import { Model, CID, CString, CBool, CDateTime } from './items'
 class Users extends Model {
   route = '/accounts/users'
   methods = ['GET']
-  description = 'User list'
+  description = 'Users'
 
   columns = [
     CID.new('id', '#'),

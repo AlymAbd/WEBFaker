@@ -49,26 +49,8 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: t('Agreements'),
-        to: '/cabinet/agreements',
-        icon: <CIcon icon={cilBook} customClassName="nav-icon" />,
-      },
-      {
-        component: CNavItem,
-        name: t('Courses'),
-        to: '/cabinet/course',
-        icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
-      },
-      {
-        component: CNavItem,
-        name: t('Category courses'),
-        to: '/cabinet/course/category',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-      },
-      {
-        component: CNavItem,
-        name: t('Course prices'),
-        to: '/cabinet/course/prices',
+        name: t('Instances'),
+        to: '/cabinet/instances',
         icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
       },
       {
